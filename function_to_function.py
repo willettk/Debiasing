@@ -37,7 +37,8 @@ cmin=np.zeros((6,2))
 cmax=np.zeros((6,2))
 
 def f(x,A0,AM,AR,Az):
-    return A0 + AM*x[0] + AR*x[1] + Az*x[2] # Function is linear in the 3 parameters with an offset. 
+    return A0 + AM*x[0] + AR*x[1] + Az*x[2] # Function is linear in the 3 
+# parameters with an offset. 
 
 for a in range(0,6):
     
