@@ -1,4 +1,7 @@
 # coding: utf-8
+
+# 3rd to run
+
 # Import packages ##############################################################
 ################################################################################
 
@@ -12,18 +15,14 @@ import math
 # Load the required data. ######################################################
 ################################################################################
 
-os.chdir("/home/ppxrh/Zoo_catalogues/Week_9/FITS")
+gal_data=fits.getdata("fits/d20.fits",1) # Galaxy zoo data.
 
-gal_data=fits.getdata("d20.fits",1) # Galaxy zoo data.
+params=np.load("npy/kc_fit_params.npy") # Parameters from the function fitting.
 
-os.chdir("/home/ppxrh/Zoo_catalogues/voronoi")
-
-params=np.load("kc_fit_params.npy") # Parameters from the function fitting.
-
-cmin=np.load("cmin.npy")
-cmax=np.load("cmax.npy")
-kmin=np.load("kmin.npy")
-kmax=np.load("kmax.npy")
+cmin=np.load("npy/cmin.npy")
+cmax=np.load("npy/cmax.npy")
+kmin=np.load("npy/kmin.npy")
+kmax=np.load("npy/kmax.npy")
 
 # Have included some limits to the data- for each arm number the minimum and maximum c and k values are set as the limits to the functions. 
 

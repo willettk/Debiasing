@@ -1,5 +1,6 @@
-
 # coding: utf-8
+
+# 2nd to run
 
 # Import packages. #############################################################
 ################################################################################
@@ -10,9 +11,7 @@ from scipy.optimize import curve_fit
 import os
 import math
 
-os.chdir("/home/ppxrh/Zoo_catalogues/voronoi")
-
-data=np.load("fixed_bin_size_params_2.npy")
+data=np.load("npy/fixed_bin_size_params_2.npy")
 
 v_min=int(np.min(data[:,0]))
 v_max=int(np.max(data[:,0]))
@@ -67,11 +66,11 @@ for a in range(0,6):
 # Save the output parameters. ##################################################
 ################################################################################
 
-np.save("kc_fit_params.npy",params)
-np.save("cmin.npy",cmin)
-np.save("cmax.npy",cmax)
-np.save("kmin.npy",kmin)
-np.save("kmax.npy",kmax)
+np.save("npy/kc_fit_params.npy",params)
+np.save("npy/cmin.npy",cmin)
+np.save("npy/cmax.npy",cmax)
+np.save("npy/kmin.npy",kmin)
+np.save("npy/kmax.npy",kmax)
 
 ################################################################################
 ################################################################################

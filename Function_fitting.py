@@ -1,5 +1,7 @@
 # coding: utf-8
 
+# 1st to run
+
 # Import packages ##############################################################
 ################################################################################
 
@@ -15,13 +17,11 @@ import math
 
 #  Import the required files (the complete data set FITS and voronoi bin data).
 
-os.chdir("/home/ppxrh/Zoo_catalogues/Week_9/FITS")
+gal_data=fits.getdata("fits/d20.fits",1)
 
-gal_data=fits.getdata("d20.fits",1)
+#os.chdir("/home/ppxrh/Zoo_catalogues/voronoi")
 
-os.chdir("/home/ppxrh/Zoo_catalogues/voronoi")
-
-bins=np.load("vor_arm_z.npy") # Voronoi bin data from the voronoi fitting. 
+bins=np.load("npy/vor_arm_z.npy") # Voronoi bin data from the voronoi fitting. 
 
 cols=["t11_arms_number_a31_1_weighted_fraction",
       "t11_arms_number_a32_2_weighted_fraction",
@@ -201,7 +201,7 @@ param_data=param_data[0:r,:]
 # Save the fitted parameters to a numpy table. #################################
 ################################################################################
 
-np.save("fixed_bin_size_params_2.npy",param_data)
+np.save("npy/fixed_bin_size_params_2.npy",param_data)
 
 ################################################################################
 ################################################################################
