@@ -170,7 +170,6 @@ def fit_function(data,bins,plot=True,savefig=False):
     
 
     param_data=param_data[0:r,:]
-    print param_data.shape
 
     if plot:
         if savefig:
