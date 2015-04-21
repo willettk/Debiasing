@@ -7,10 +7,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
-import os
 from astropy.io import fits
-import math
 
 # Load the required data. ######################################################
 ################################################################################

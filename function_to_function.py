@@ -6,9 +6,7 @@
 ################################################################################
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-import os
 import math
 
 data=np.load("npy/fixed_bin_size_params_2.npy")
