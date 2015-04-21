@@ -148,8 +148,14 @@ for v in range(v_min,v_max+1):
         z_max=int(np.max(data_plot[a+1]))
         
         clr=[0,0,1]
+
+        if z_max-z_min != 0:
         
-        clr_diff=(1/(z_max-z_min))
+            clr_diff=(1/(z_max-z_min))
+
+        else:
+
+            clr_diff=0
         
         for z in range(z_min,z_max+1):
             

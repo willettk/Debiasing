@@ -1,5 +1,4 @@
 # coding: utf-8
-
 # Import packages ##############################################################
 ################################################################################
 
@@ -42,6 +41,21 @@ i=np.array([np.arange(0,len(gal_tb.T))])
 
 gal_tb=np.concatenate([gal_tb,i]) # i is an index column.
 
+# Find the minimum redshift bin values from means of lowest bins. ##############
+################################################################################
+
+os.chdir("/home/ppxrh/Zoo_catalogues/voronoi")
+
+r_data=np.load("fixed_bin_size_params_2.npy")
+
+min_z=np.zeros((6,1))
+
+for a in range(0,6):
+    
+    r_data_0=r_data[(r_data[:,1] == a) & (r_data[:,2] == 1)]
+    
+    min_z[a]=np.mean(r_data_0[:,5])
+
 # Define functions for getting log(vf) (x) from CF (y) and v.v. ################
 ################################################################################
 
@@ -63,13 +77,13 @@ def i_f(y,k,c):
 
 debiased=np.zeros((6,len(gal_tb.T)))
 
-z_base=0.02 # Low redshift that functions are corrected to. 
-
 # Each galaxy gets a function fit to its M,R and z parameters, which are scaled 
 # to the equivalent M and r functions at low z.
 
 for a in range(0,6):
-    
+
+    z_base=min_z[a]
+
     p=params[a]
     
     k=params[a,1]+params[a,2]*gal_tb[6]+params[a,3]*gal_tb[7]+params[a,4]*gal_tb[8]
@@ -94,15 +108,15 @@ for a in range(0,6):
     
     kc=kc.T
 
-    kc[:,0:2][kh]=kmax[a,:]
-    kc[:,0:2][kl]=kmin[a,:]
-    kc[:,0:2][ch]=cmax[a,:]
-    kc[:,0:2][cl]=cmin[a,:]
+    kc[:,0][kh]=kmax[a,0]
+    kc[:,0][kl]=kmin[a,0]
+    kc[:,1][ch]=cmax[a,1]
+    kc[:,1][cl]=cmin[a,1]
     
-    kc[:,2:][kbh]=kmax[a,:]
-    kc[:,2:][kbl]=kmin[a,:]
-    kc[:,2:][cbh]=cmax[a,:]
-    kc[:,2:][cbl]=cmin[a,:]
+    kc[:,2][kbh]=kmax[a,0]
+    kc[:,2][kbl]=kmin[a,0]
+    kc[:,3][cbh]=cmax[a,1]
+    kc[:,3][cbl]=cmin[a,1]
     
     kc=kc.T
     
