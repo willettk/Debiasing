@@ -56,7 +56,7 @@ def load_data():
         
         min_z[a]=np.mean(r_data_0[:,5])
     
-    return gal_tb,params,cmin,cmax,kmin,kmax
+    return gal_tb,params,cmin,cmax,kmin,kmax,min_z
 
 # Define functions for getting log(vf) (x) from CF (y) and v.v. ################
 ################################################################################
@@ -79,7 +79,7 @@ def i_f(y,k,c):
     
     return -(1/k)*(np.log((L/y)-1)-c)
 
-def debias():
+def debias(min_z):
 
     # Debiasing procedure. #########################################################
     ################################################################################
@@ -116,16 +116,16 @@ def debias():
         
         kc=kc.T
     
-        kc[:,0:2][kh]=kmax[a,:]
-        kc[:,0:2][kl]=kmin[a,:]
-        kc[:,0:2][ch]=cmax[a,:]
-        kc[:,0:2][cl]=cmin[a,:]
+        kc[:,0][kh]=kmax[a,0]
+        kc[:,0][kl]=kmin[a,0]
+        kc[:,1][ch]=cmax[a,1]
+        kc[:,1][cl]=cmin[a,1]
         
-        kc[:,2:][kbh]=kmax[a,:]
-        kc[:,2:][kbl]=kmin[a,:]
-        kc[:,2:][cbh]=cmax[a,:]
-        kc[:,2:][cbl]=cmin[a,:]
-        
+        kc[:,2][kbh]=kmax[a,0]
+        kc[:,2][kbl]=kmin[a,0]
+        kc[:,3][cbh]=cmax[a,1]
+        kc[:,3][cbl]=cmin[a,1]
+
         kc=kc.T
         
         ######################################################################
@@ -152,27 +152,6 @@ def plot_debiased(gal_tb,debiased):
 
     # Plot debiased values vs. raw values for comparison. Blue -> red with z. ##
     ############################################################################
-    kc[:,0][kh]=kmax[a,0]
-    kc[:,0][kl]=kmin[a,0]
-    kc[:,1][ch]=cmax[a,1]
-    kc[:,1][cl]=cmin[a,1]
-    
-    kc[:,2][kbh]=kmax[a,0]
-    kc[:,2][kbl]=kmin[a,0]
-    kc[:,3][cbh]=cmax[a,1]
-    kc[:,3][cbl]=cmin[a,1]
-    
-    kc=kc.T
-    
-    ######################################################################
-    
-    a_d=np.array([gal_tb[-1],gal_tb[a],kc[0],kc[1],kc[2],kc[3]])
-    
-    a_d=(a_d.T[a_d[1] > 0]).T
-    
-    a_d[1]=np.log10(a_d[1])
-    
-    CF=f(a_d[1],a_d[2],a_d[3])
     
     fig,axarr = plt.subplots(2,3,sharex='col',sharey='row')
     
@@ -233,8 +212,8 @@ def plot_vf_histogram(debiased):
 
 if __name__ == "__main__":
 
-    gal_tb,params,cmin,cmax,kmin,kmax = load_data()
-    debiased = debias()
+    gal_tb,params,cmin,cmax,kmin,kmax,min_z = load_data()
+    debiased = debias(min_z)
     plot_debiased(gal_tb,debiased)
     plot_vf_histogram(debiased)
 
