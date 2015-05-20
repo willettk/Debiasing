@@ -136,8 +136,8 @@ def fit_function(data,bins,plot=True):
             z_max=int(np.max(data_plot[a+1]))
             
             clr=[0,0,1]
-            
-            clr_diff=(1/(z_max-z_min))
+
+            clr_diff = (1/(z_max-z_min)) if z_max-z_min != 0 else 0
             
             # Loop over redshift slices
             for z in range(z_min,z_max+1):

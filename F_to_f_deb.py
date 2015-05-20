@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from astropy.io import fits
 
-n_morph = 6
+n_morph = 6     # Number of poss. morphologies (6 for the various spiral arms)
 
 def load_data():
 
@@ -43,7 +43,23 @@ def load_data():
     
     gal_tb=np.concatenate([gal_tb,i]) # i is an index column.
     
+    # Find the minimum redshift bin values from means of lowest bins. ##############
+    ################################################################################
+    
+    r_data=np.load("npy/fixed_bin_size_params_2.npy")
+    
+    min_z=np.zeros((6,1))
+    
+    for a in range(0,6):
+        
+        r_data_0=r_data[(r_data[:,1] == a) & (r_data[:,2] == 1)]
+        
+        min_z[a]=np.mean(r_data_0[:,5])
+    
     return gal_tb,params,cmin,cmax,kmin,kmax
+
+# Define functions for getting log(vf) (x) from CF (y) and v.v. ################
+################################################################################
 
 def f(x,k,c): 
         
@@ -63,20 +79,19 @@ def i_f(y,k,c):
     
     return -(1/k)*(np.log((L/y)-1)-c)
 
-def debiase():
+def debias():
 
-    # Debiasing procedure. #####################################################
-    ############################################################################
+    # Debiasing procedure. #########################################################
+    ################################################################################
 
     debiased=np.zeros((n_morph,len(gal_tb.T)))
-    
-    z_base=0.02 # Low redshift that functions are corrected to. 
     
     # Each galaxy gets a function fit to its M,R and z parameters, which are scaled 
     # to the equivalent M and r functions at low z.
     
     for a in range(0,n_morph):
         
+        z_base=min_z[a]
         p=params[a]
         
         k=params[a,1]+params[a,2]*gal_tb[6]+params[a,3]*gal_tb[7]+params[a,4]*gal_tb[8]
@@ -137,6 +152,27 @@ def plot_debiased(gal_tb,debiased):
 
     # Plot debiased values vs. raw values for comparison. Blue -> red with z. ##
     ############################################################################
+    kc[:,0][kh]=kmax[a,0]
+    kc[:,0][kl]=kmin[a,0]
+    kc[:,1][ch]=cmax[a,1]
+    kc[:,1][cl]=cmin[a,1]
+    
+    kc[:,2][kbh]=kmax[a,0]
+    kc[:,2][kbl]=kmin[a,0]
+    kc[:,3][cbh]=cmax[a,1]
+    kc[:,3][cbl]=cmin[a,1]
+    
+    kc=kc.T
+    
+    ######################################################################
+    
+    a_d=np.array([gal_tb[-1],gal_tb[a],kc[0],kc[1],kc[2],kc[3]])
+    
+    a_d=(a_d.T[a_d[1] > 0]).T
+    
+    a_d[1]=np.log10(a_d[1])
+    
+    CF=f(a_d[1],a_d[2],a_d[3])
     
     fig,axarr = plt.subplots(2,3,sharex='col',sharey='row')
     
@@ -198,7 +234,7 @@ def plot_vf_histogram(debiased):
 if __name__ == "__main__":
 
     gal_tb,params,cmin,cmax,kmin,kmax = load_data()
-    debiased = debiase()
+    debiased = debias()
     plot_debiased(gal_tb,debiased)
     plot_vf_histogram(debiased)
 
